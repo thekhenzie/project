@@ -184,6 +184,49 @@ details p { margin: 8px 0 0; color: var(--muted); font-size: 14px; }
 .scout div { background: var(--panel); border: 1px solid var(--line); border-radius: 2px; padding: 12px 14px; min-width: 0; }
 .scout h3 { margin: 0 0 4px; font-family: var(--font-display); font-size: 16px; color: var(--ivory); }
 .scout p { margin: 0; font-size: 14px; color: var(--muted); }
+.bracket-note b { color: var(--ivory); font-weight: 600; }
+
+/* Swiss: three record columns of pick cards, then the Round 1 slate */
+.swiss-wrap { display: grid; gap: 16px; }
+.swiss { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; align-items: start; }
+.slot-col { display: grid; gap: 12px; min-width: 0; }
+.slot-h {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 10px;
+  border-bottom: 1px solid var(--gold-dim); padding-bottom: 6px;
+  font-family: var(--font-data); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+}
+.slot-h b { font-family: var(--font-display); font-size: 20px; color: var(--gold); letter-spacing: .04em; }
+.card[data-result="adv"] { border-color: var(--gold-dim); background: linear-gradient(180deg, #1f1a10, var(--panel) 60%); }
+.r1-line { margin: 0; font-family: var(--font-data); font-size: 13px; color: var(--muted); letter-spacing: .02em; }
+.r1-line b { color: var(--fg); font-weight: 600; }
+.seg.rec { grid-template-columns: repeat(5, 1fr); }
+.seg button[aria-pressed="true"][data-o="pending"] { background: var(--panel-2); color: var(--ivory); }
+.seg button[aria-pressed="true"][data-o="hit"] { background: var(--hex-dim); color: #d6fffb; }
+.seg button[aria-pressed="true"][data-o="adv"] { background: #3d3018; color: #f3dfb0; }
+.seg button[aria-pressed="true"][data-o="miss"] { background: var(--miss-dim); color: #ffd9d3; }
+.sec-h { margin: 8px 0 0; font-family: var(--font-display); font-size: 18px; color: var(--ivory); letter-spacing: .04em; }
+.sec-h small { font-family: var(--font-data); font-size: 12px; color: var(--muted); letter-spacing: .06em; margin-left: 8px; font-weight: 600; }
+.r1 { display: grid; border: 1px solid var(--line); border-radius: 2px; background: var(--panel); }
+.r1-row { display: grid; grid-template-columns: 96px 1fr auto; gap: 12px; align-items: center; padding: 9px 12px; }
+.r1-row + .r1-row { border-top: 1px solid var(--line); }
+.r1-time { font-family: var(--font-data); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.r1-match { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
+.r1-match .tag { width: 48px; }
+.r1-match .tag.lean { border-color: var(--gold); color: var(--gold); }
+.r1-match .vs { font-family: var(--font-data); font-size: 12px; color: var(--muted); }
+.r1-note { font-size: 13px; color: var(--muted); }
+.r1-pct { font-family: var(--font-data); font-weight: 700; font-size: 14px; color: var(--ivory); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+.sim-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 2px; background: var(--panel); }
+.sim { width: 100%; min-width: 440px; border-collapse: collapse; font-family: var(--font-data); font-size: 14px; font-variant-numeric: tabular-nums; }
+.sim th { padding: 8px 10px; text-align: right; font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--line); }
+.sim td { padding: 7px 10px; text-align: right; color: var(--muted); }
+.sim th:first-child, .sim td:first-child { text-align: left; }
+.sim tr + tr td { border-top: 1px solid var(--line); }
+.sim tr.cut td { border-top: 1px solid var(--gold-dim); }
+.sim td:first-child { color: var(--fg); font-weight: 600; }
+.sim td.adv { color: var(--ivory); font-weight: 700; }
+.sim tr.picked td:first-child { color: var(--gold); }
+.sim td.mine { color: var(--gold); font-weight: 700; }
 
 footer { color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); padding-top: 14px; display: grid; gap: 6px; }
 footer a { color: var(--gold); }
@@ -191,6 +234,10 @@ footer a { color: var(--gold); }
 @media (max-width: 420px) {
   .grid { grid-template-columns: 1fr; }
   .pick .v { font-size: 20px; }
+  .r1-row { grid-template-columns: 64px 1fr auto; gap: 8px; }
+  .sim { min-width: 0; font-size: 13px; }
+  .sim th { padding: 7px 4px; font-size: 11px; letter-spacing: .02em; }
+  .sim td { padding: 6px 4px; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
@@ -199,7 +246,7 @@ footer a { color: var(--gold); }
   <header>
     <div class="eyebrow"><span>Worlds 2026</span><span>Patch 26.20</span><span>Fearless draft</span><span>Oct 15 – Nov 14</span></div>
     <h1>Worlds 2026 Pick Board</h1>
-    <p class="lede">My Crystal Ball and Play-In picks, built from gol.gg 2026 stats and Worlds history. As results come in, mark each pick hit or miss and the score updates. Marks are saved in this browser.</p>
+    <p class="lede">My Crystal Ball, Play-In and Swiss picks, built from gol.gg 2026 stats, betting markets and Worlds history. As results come in, mark each pick hit or miss and the score updates. Marks are saved in this browser.</p>
   </header>
 
   <section class="scores" aria-label="Score">
@@ -216,15 +263,22 @@ footer a { color: var(--gold); }
       <div class="bar"><i id="pi-bar"></i></div>
     </div>
     <div class="score">
+      <span class="label">Swiss</span>
+      <span class="num" id="sw-score">0 <small>/ 8 advanced</small></span>
+      <span class="sub" id="sw-sub">0 of 3 records exact · 0 of 8 settled</span>
+      <div class="bar"><i id="sw-bar"></i></div>
+    </div>
+    <div class="score">
       <span class="label">Still reachable</span>
       <span class="num" id="max-score">1,085</span>
-      <span class="sub">Points earned + every unsettled pick</span>
+      <span class="sub">Crystal Ball + Play-In, earned + unsettled</span>
     </div>
   </section>
 
   <nav class="tabs" role="tablist">
     <button class="tab" role="tab" id="tab-cb" aria-controls="panel-cb" data-tab="cb">Crystal Ball<span class="pts">1,050 pts</span></button>
     <button class="tab" role="tab" id="tab-pi" aria-controls="panel-pi" data-tab="pi">Play-In<span class="pts">35 pts</span></button>
+    <button class="tab" role="tab" id="tab-sw" aria-controls="panel-sw" data-tab="sw">Swiss<span class="pts">125 pts</span></button>
   </nav>
 
   <section id="panel-cb" role="tabpanel" aria-labelledby="tab-cb" style="display:grid;gap:16px">
@@ -256,9 +310,32 @@ footer a { color: var(--gold); }
     </div>
   </section>
 
+  <section id="panel-sw" role="tabpanel" aria-labelledby="tab-sw" style="display:grid;gap:16px" hidden>
+    <div class="toolbar">
+      <p class="bracket-note" id="sw-lock"></p>
+      <div class="chips">
+        <button class="ghost" id="restore-sw">Restore my picks</button>
+        <button class="ghost" id="reset-sw">Clear results</button>
+      </div>
+    </div>
+    <p class="bracket-note">One team for each winning record (3-0, 3-1, 3-2), plus five more that advance with any record. There is no 0-3 pick. Once Swiss ends, mark each team's actual record: a record pick on the right record is an exact hit, and a different winning record still counts as advanced.</p>
+    <div class="swiss-wrap" id="swiss"></div>
+    <h2 class="sec-h">Round 1<small>Bo1 · your timezone · order provisional</small></h2>
+    <div class="r1" id="r1"></div>
+    <h2 class="sec-h">Simulation<small>100,000 runs from the real Round 1 draw</small></h2>
+    <p class="bracket-note">Each team gets a rating tuned to the Round 1 leans and the betting markets. Every run adds random form noise, then plays Rounds 1–5 under Riot's rules: Bo1 in Rounds 1–2, Bo3 for any advancement or elimination match, random draws within each record, no rematches. Gold marks your picks (the record, or Advance), and the gold line marks the model's top 8. Your 8 advance 5.8 at a time on average, and all 8 make it 1.1% of the time.</p>
+    <div class="sim-wrap"><table class="sim" id="sim"></table></div>
+    <div class="scout">
+      <div><h3>North America</h3><p>TL (vs CFO) and LYON (vs TSW) are both Round 1 favourites. Simulated: TL 39%, LYON 35% to advance, and at least one LCS team gets out 63% of the time (47% even if both are rated 50 points lower). That backs Crystal Ball #16 Yes and #15 = 4. TL is in the picks at 3-2.</p></div>
+      <div><h3>3-0 history</h3><p>2023–25: one LCK and one LPL team every year (JDG + GEN, LNG + GEN, KT + AL). Only 2 of 6 were first seeds, and none went on to win Worlds.</p></div>
+      <div><h3>0-3 history</h3><p>No LCK or LPL team in 23 appearances. An LEC team every year (BDS, MDK, FNC). Minor-region teams mostly finish 1-3.</p></div>
+      <div><h3>Check before the lock</h3><p>TES: ZUIAN was denied a US visa twice, so 369 starts. BLG: Bin or Flandre at top. DK: news on the sale and salary delays.</p></div>
+    </div>
+  </section>
+
   <footer>
-    <span>Sources: <a href="https://gol.gg/players/list/season-S16/split-ALL/tournament-ALL/" target="_blank" rel="noopener">gol.gg 2026</a> · <a href="https://lolesports.com/news/worlds-2026-primer" target="_blank" rel="noopener">lolesports primer</a> · <a href="https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-20-notes/" target="_blank" rel="noopener">Patch 26.20 notes</a> · <a href="https://liquipedia.net/leagueoflegends/World_Championship/2026" target="_blank" rel="noopener">Liquipedia</a></span>
-    <span>Make your picks at <a href="https://lolesports.com/en-PH/pickems/115660540725177488" target="_blank" rel="noopener">lolesports.com Pick'Ems</a>. Researched Oct 12, 2026.</span>
+    <span>Sources: <a href="https://gol.gg/players/list/season-S16/split-ALL/tournament-ALL/" target="_blank" rel="noopener">gol.gg 2026</a> · <a href="https://lolesports.com/news/worlds-2026-primer" target="_blank" rel="noopener">lolesports primer</a> · <a href="https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-20-notes/" target="_blank" rel="noopener">Patch 26.20 notes</a> · <a href="https://liquipedia.net/leagueoflegends/World_Championship/2026" target="_blank" rel="noopener">Liquipedia</a> · <a href="https://www.strafe.com/esports-betting/news/lol-worlds-2026-predictions-quarter-finalists/" target="_blank" rel="noopener">Strafe odds</a> · <a href="https://dpm.lol/news/worlds-2026-power-rankings-dpm-esports" target="_blank" rel="noopener">DPM rankings</a></span>
+    <span>Make your picks at <a href="https://lolesports.com/en-PH/pickems/115660540725177488" target="_blank" rel="noopener">lolesports.com Pick'Ems</a>. Researched Oct 12, 2026 (Crystal Ball, Play-In) and Oct 19, 2026 (Swiss).</span>
   </footer>
 </div>
 
@@ -317,6 +394,66 @@ const MATCHES = [
   { id: "final", label: "Final · to Swiss", pts: 10, area: "final" },
 ];
 const RESEARCH_PICKS = { ub1: "FUR", ub2: "KC", ubf: "KC", lbs: "C9", lbf: "FUR", final: "KC" };
+
+/* Swiss: adv is the % to reach three wins in the simulation below */
+const SW = {
+  GEN:  { name: "Gen.G", region: "LCK 1", adv: 92,
+    why: "LCK champion (beat HLE 3-1 in the final), 68.1% win rate and the best close-out in the field (87% when ahead at 15). Round 1 is IG, who played no international series in 2026. Favourite outright at about 30%. Went 3-0 in 2024." },
+  HLE:  { name: "Hanwha Life", region: "LCK 2", adv: 89,
+    why: "MSI champion and #1 in Riot's power rankings. Went 3-1 at both 2024 and 2025 Worlds. Their last three series losses were all to GEN, and same-region matches are allowed from Round 2." },
+  T1:   { name: "T1", region: "LCK 3", adv: 88,
+    why: "Three-time defending champion and a heavy favourite vs LOS. But 10-10 in their last 20 series and only 77% when ahead at 15. Swiss history: 3-1 in 2024, 3-2 in 2025. They peak in Knockouts." },
+  DK:   { name: "Dplus KIA", region: "LCK 4", adv: 59,
+    why: "EWC champion (beat G2 2-0, then BLG, GEN, and KC 3-0). But only 53.8% on the year, streaky, and dealing with salary delays from a stalled sale. Whoever loses G2 vs DK can still go 3-2." },
+  AL:   { name: "Anyone's Legend", region: "LPL 1", adv: 62,
+    why: "LPL champion (beat BLG 3-1 in the final) and 3-0 in 2025 Swiss. Round 1 vs KC is the shakiest opener of any favourite: KC beat them 2-0 at EWC. Breathe has only been their top since July." },
+  BLG:  { name: "Bilibili Gaming", region: "LPL 2", adv: 89,
+    why: "Best numbers in the field: 70.6% win rate, +1023 gold at 15. Won First Stand, MSI runner-up. Risk: 2-3 in 2025 Swiss, and Bin vs Flandre at top is unsettled." },
+  TES:  { name: "Top Esports", region: "LPL 3" },
+  IG:   { name: "Invictus Gaming", region: "LPL 4", adv: 41,
+    why: "The market's 8th team (42–52% to make quarters). 9-4 in series since TheShy returned, but 46% on the season, 0-10 in series vs AL and BLG, and no international games this year." },
+  G2:   { name: "G2 Esports", region: "LEC 1", adv: 58,
+    why: "Won every LEC split in 2026, beat GEN 3-0 at First Stand and T1 3-1 at MSI. #4 in Riot's rankings. Round 1 vs DK is a coin flip, and form since MSI is shaky (Perkz took over as coach in July)." },
+  MKOI: { name: "Movistar KOI", region: "LEC 2" },
+  KC:   { name: "Karmine Corp", region: "LEC 3", adv: 50,
+    why: "My bias pick. 9-2 in Play-In games, EWC runner-up (beat AL 2-0 and T1 2-1) and already warmed up on US stages. DPM ranks them 8th, Riot 9th. The market's 8th team is IG instead, but the simulation keeps KC 8th (50% vs IG 41%, TL 39%, LYON 35%)." },
+  TL:   { name: "Team Liquid", region: "LCS 1", adv: 39,
+    why: "The NA pick. Round 1 vs CFO (about 66%) is the softest opener outside the LCK and LPL. LCS champion with an 80.8% win rate this summer, but 0-6 in games vs T1 at MSI and no series win over an LCK or LPL team in 2026. 3-2 is their most likely winning record (19%). Also backs Crystal Ball #16." },
+  LYON: { name: "LYON", region: "LCS 2" },
+  TSW:  { name: "Team Secret Whales", region: "LCP 1" },
+  CFO:  { name: "CTBC Flying Oyster", region: "LCP 2" },
+  LOS:  { name: "LOS", region: "CBLOL 1" },
+};
+// The Pick'Em screen: one team per winning record, then 5 that advance with any record
+const SLOTS = [
+  { id: "30", rec: "3-0", alt: "HLE" }, { id: "31", rec: "3-1" }, { id: "32", rec: "3-2", alt: "DK" },
+  { id: "a1", rec: "adv" }, { id: "a2", rec: "adv" }, { id: "a3", rec: "adv" }, { id: "a4", rec: "adv" }, { id: "a5", rec: "adv", alt: "KC" },
+];
+const SW_RESEARCH = { "30": "GEN", "31": "T1", "32": "TL", "a1": "HLE", "a2": "BLG", "a3": "AL", "a4": "G2", "a5": "DK" };
+const REC_LABEL = { "3-0": "Undefeated", "3-1": "Comfy in", "3-2": "Close call", "adv": "Any record" };
+// Round 1 runs hourly from 17:00 UTC on Oct 23 in this order
+const R1 = [
+  { a: "GEN", b: "IG",   lean: "GEN",  p: "~78%" },
+  { a: "TL",  b: "CFO",  lean: "TL",   p: "~67%" },
+  { a: "AL",  b: "KC",   lean: "AL",   p: "~55%", note: "Best upset spot: KC beat AL 2-0 at EWC" },
+  { a: "G2",  b: "DK",   lean: "DK",   p: "~55%", note: "Coin flip. DK beat G2 2-0 at EWC" },
+  { a: "HLE", b: "TES",  lean: "HLE",  p: "~78%", note: "TES start sub top 369" },
+  { a: "LOS", b: "T1",   lean: "T1",   p: "~85%" },
+  { a: "TSW", b: "LYON", lean: "LYON", p: "~60%", note: "LYON beat TSW 3-0 at MSI" },
+  { a: "BLG", b: "MKOI", lean: "BLG",  p: "~78%" },
+];
+const R1_START = Date.UTC(2026, 9, 23, 17);
+// 100k-run Monte Carlo (σ 50 form noise): team, R1 win, 3-0, 3-1, 3-2, advance, 0-3
+const SIM = [
+  ["GEN", 76, 37, 35, 20, 92, 1], ["HLE", 77, 33, 35, 21, 89, 1], ["BLG", 77, 33, 35, 21, 89, 1],
+  ["T1", 84, 34, 34, 21, 88, 1], ["AL", 55, 11, 24, 27, 62, 6], ["DK", 51, 10, 23, 27, 59, 7],
+  ["G2", 49, 10, 22, 26, 58, 7], ["KC", 45, 7, 18, 24, 50, 9], ["IG", 24, 4, 15, 22, 41, 14],
+  ["TL", 66, 6, 15, 19, 39, 9], ["LYON", 59, 5, 13, 17, 35, 11], ["TES", 23, 3, 10, 16, 29, 20],
+  ["MKOI", 23, 3, 10, 16, 29, 20], ["TSW", 41, 2, 6, 10, 19, 23], ["LOS", 16, 1, 4, 7, 11, 38],
+  ["CFO", 34, 1, 4, 6, 11, 32],
+];
+const LOCK = R1_START;
+
 const KEY = "worlds26-pickboard-v1";
 
 function load() {
@@ -325,11 +462,14 @@ function load() {
 }
 const saved = load();
 const state = Object.assign({
-  tab: "cb", filter: "All", mode: "pick",
+  tab: "sw", filter: "All", mode: "pick",
   cb: {},                         // id -> { alt: bool, r: "pending"|"hit"|"miss" }
   pick: { ...RESEARCH_PICKS },
   res: {},
+  sw: { ...SW_RESEARCH },         // slot -> team
+  swRec: {},                      // team -> "3-0"|"3-1"|"3-2"|"out"
 }, saved || {});
+if (!SLOTS.every(s => state.sw[s.id])) state.sw = { ...SW_RESEARCH };  // slots saved under an older layout
 function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
 
 /* Bracket logic: who plays in each slot, given a set of winners */
@@ -367,7 +507,14 @@ function scores() {
     if (state.res[m.id]) { piSettled++; if (state.pick[m.id] === state.res[m.id]) pi += m.pts; }
     else piOpen += m.pts;
   }
-  return { cb, cbSettled, cbOpen, pi, piSettled, piOpen };
+  let swAdv = 0, swExact = 0, swSettled = 0;
+  for (const s of SLOTS) {
+    const o = outcome(s);
+    if (o !== "pending") swSettled++;
+    if (o === "hit" || o === "adv") swAdv++;
+    if (o === "hit" && s.rec !== "adv") swExact++;
+  }
+  return { cb, cbSettled, cbOpen, pi, piSettled, piOpen, swAdv, swExact, swSettled };
 }
 const fmt = n => n.toLocaleString("en-US");
 
@@ -379,14 +526,16 @@ function renderScores() {
   document.getElementById("pi-score").innerHTML = `${s.pi} <small>/ 35</small>`;
   document.getElementById("pi-sub").textContent = `${s.piSettled} of 6 settled`;
   document.getElementById("pi-bar").style.width = (s.pi / 35 * 100) + "%";
+  document.getElementById("sw-score").innerHTML = `${s.swAdv} <small>/ 8 advanced</small>`;
+  document.getElementById("sw-sub").textContent = `${s.swExact} of 3 records exact · ${s.swSettled} of 8 settled`;
+  document.getElementById("sw-bar").style.width = (s.swAdv / 8 * 100) + "%";
   document.getElementById("max-score").textContent = fmt(s.cb + s.cbOpen + s.pi + s.piOpen);
 }
 
 /* Tabs */
 function renderTabs() {
   document.querySelectorAll(".tab").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === state.tab)));
-  document.getElementById("panel-cb").hidden = state.tab !== "cb";
-  document.getElementById("panel-pi").hidden = state.tab !== "pi";
+  for (const t of ["cb", "pi", "sw"]) document.getElementById("panel-" + t).hidden = state.tab !== t;
 }
 document.querySelectorAll(".tab").forEach(b => b.addEventListener("click", () => { state.tab = b.dataset.tab; save(); renderTabs(); }));
 
@@ -499,5 +648,105 @@ function renderBracket() {
 }
 document.querySelectorAll(".mode button").forEach(b => b.addEventListener("click", () => { state.mode = b.dataset.mode; save(); renderBracket(); }));
 
-renderTabs(); renderFilters(); renderCards(); renderBracket(); renderScores();
+/* Swiss */
+function outcome(s) {
+  const r = state.swRec[state.sw[s.id]];
+  if (!r) return "pending";
+  if (r === "out") return "miss";
+  return r === s.rec || s.rec === "adv" ? "hit" : "adv";
+}
+// Put a team in a slot; if it already sits in another slot, the two trade places
+function swapIn(slotId, team) {
+  const cur = state.sw[slotId];
+  const other = Object.keys(state.sw).find(k => k !== slotId && state.sw[k] === team);
+  if (other) state.sw[other] = cur;
+  state.sw[slotId] = team;
+}
+function r1Of(t) {
+  const m = R1.find(x => x.a === t || x.b === t);
+  return { m, opp: m.a === t ? m.b : m.a };
+}
+function swCard(s) {
+  const t = state.sw[s.id], info = SW[t], o = outcome(s), r = state.swRec[t] || "pending";
+  const research = SW_RESEARCH[s.id];
+  const target = t !== research ? research : s.alt;
+  let swap = "";
+  if (target && target !== t) {
+    const at = SLOTS.find(x => x.id !== s.id && state.sw[x.id] === target);
+    const where = at && (at.rec === "adv" ? "advance" : at.rec);
+    const label = t !== research ? `Back to ${target}` : at ? `Swap with ${target} (${where})` : `Swap to ${target}`;
+    swap = `<button class="ghost swap" data-slot="${s.id}" data-to="${target}">${label}</button>`;
+  }
+  const { m, opp } = r1Of(t);
+  const c = info.adv >= 75 ? "high" : info.adv < 50 ? "low" : "medium";
+  const recs = ["pending", "3-0", "3-1", "3-2", "out"];
+  return `<article class="card" data-result="${o}">
+    <div class="card-top"><span><span class="cat">${s.rec === "adv" ? "Advance" : s.rec}</span> · ${REC_LABEL[s.rec]}</span><span class="val">${info.region}</span></div>
+    <div class="pick-row">
+      <div class="pick"><span class="k">${t === research ? "Your pick" : "Your pick (swapped)"}</span><span class="v">${info.name}</span></div>
+      <span class="conf" data-c="${c}">~${info.adv}% to advance</span>
+    </div>
+    <p class="r1-line">Round 1 vs <b>${SW[opp].name}</b> · lean ${m.lean} ${m.p}</p>
+    ${swap}
+    <div class="seg rec" role="group" aria-label="Actual Swiss record for ${info.name}">
+      ${recs.map(x => `<button data-team="${t}" data-r="${x}" data-o="${x === r ? o : ""}" aria-pressed="${x === r}">${x === "pending" ? "TBD" : x === "out" ? "Out" : x}</button>`).join("")}
+    </div>
+    <details><summary>Why this pick</summary><p>${info.why}</p></details>
+  </article>`;
+}
+function renderSwiss() {
+  const el = document.getElementById("swiss");
+  const records = ["3-0", "3-1", "3-2"].map(rec => `<div class="slot-col">
+      <div class="slot-h"><b>${rec}</b><span>${REC_LABEL[rec]}</span></div>
+      ${SLOTS.filter(s => s.rec === rec).map(swCard).join("")}
+    </div>`).join("");
+  const adv = SLOTS.filter(s => s.rec === "adv");
+  el.innerHTML = `<div class="swiss">${records}</div>
+    <div class="slot-h"><b>Advance</b><span>${REC_LABEL.adv} · ${adv.length} picks</span></div>
+    <div class="swiss">${adv.map(swCard).join("")}</div>`;
+  el.querySelectorAll("[data-slot]").forEach(b => b.addEventListener("click", () => {
+    swapIn(b.dataset.slot, b.dataset.to); save(); renderSwiss(); renderScores();
+  }));
+  el.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => {
+    if (b.dataset.r === "pending") delete state.swRec[b.dataset.team]; else state.swRec[b.dataset.team] = b.dataset.r;
+    save(); renderSwiss(); renderScores();
+  }));
+  renderSim();
+}
+function renderSim() {
+  const mine = {};
+  for (const s of SLOTS) mine[state.sw[s.id]] = s.rec;
+  const cols = ["3-0", "3-1", "3-2"];
+  document.getElementById("sim").innerHTML =
+    `<tr><th>Team</th><th>R1 win</th><th>3-0</th><th>3-1</th><th>3-2</th><th>Advance</th><th>0-3</th></tr>` +
+    SIM.map(([t, r1, ...v], i) => `<tr class="${mine[t] ? "picked" : ""}${i === 8 ? " cut" : ""}">
+      <td>${t}</td><td>${r1}%</td>
+      ${cols.map((c, j) => `<td class="${mine[t] === c ? "mine" : ""}">${v[j]}%</td>`).join("")}
+      <td class="adv${mine[t] === "adv" ? " mine" : ""}">${v[3]}%</td><td>${v[4]}%</td>
+    </tr>`).join("");
+}
+function renderR1() {
+  const tag = (x, m) => `<span class="tag${x === m.lean ? " lean" : ""}">${x}</span>`;
+  document.getElementById("r1").innerHTML = R1.map((m, i) => {
+    const time = new Date(R1_START + i * 36e5).toLocaleString([], { weekday: "short", hour: "numeric", minute: "2-digit" });
+    return `<div class="r1-row">
+      <span class="r1-time">${time}</span>
+      <div class="r1-match">${tag(m.a, m)}<span class="vs">vs</span>${tag(m.b, m)}${m.note ? `<span class="r1-note">${m.note}</span>` : ""}</div>
+      <span class="r1-pct">${m.lean} ${m.p}</span>
+    </div>`;
+  }).join("");
+}
+function renderLock() {
+  const el = document.getElementById("sw-lock");
+  const when = new Date(LOCK).toLocaleString([], { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+  const left = LOCK - Date.now();
+  if (left <= 0) { el.innerHTML = `<b>Picks locked</b> · ${when} your time`; return; }
+  const d = Math.floor(left / 864e5), h = Math.floor(left % 864e5 / 36e5), min = Math.floor(left % 36e5 / 6e4);
+  el.innerHTML = `<b>Picks lock in ${d}d ${h}h ${min}m</b> · ${when} your time (Fri Oct 23, 12:00 CDT)`;
+}
+armed(document.getElementById("restore-sw"), "Restore my picks", () => { state.sw = { ...SW_RESEARCH }; save(); renderSwiss(); renderScores(); });
+armed(document.getElementById("reset-sw"), "Clear results", () => { state.swRec = {}; save(); renderSwiss(); renderScores(); });
+
+renderTabs(); renderFilters(); renderCards(); renderBracket(); renderSwiss(); renderR1(); renderLock(); renderScores();
+setInterval(renderLock, 30000);
 </script>
